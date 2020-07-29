@@ -9,22 +9,66 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
-```{r cars}
-summary(cars)
+## P1.
+
+## a)
+
+
+
+La tasa de interés corresponde al porcentaje de un crédito que se paga en retribución a un préstamo de dinero. Esta cifra usualmente se representa porcentualmente. Esta se fija en terminos generales en función de la situación economica de cada país, pero también varia dependiendo de persona a persona. La tasa de interes estará atada al riesgo asociado a la solicitud.
+
+Entre aquellos factores de dependencia, encontramos la duración del prestamo. La tasa de interés será mayor en la medida que el prestamo sea de mayor duración; el prestamista considerará el riesgo de una crisis a futuro y por ello exigirá una compensación mayor. 
+
+La tasa de interés dependera de los activos del solicitante, mientras mayor el patrimonio menor será la tasa de interés ya que el prestamista tomará en forma de compensación los bienes en caso de verse incapaz de pagar el deudor. Esto es especialmente cierto para los domicilios.
+
+La tasa de interés también dependerá de la cifra solicitada. Nuevamente en función del riesgo, el prestamista subirá la tasa si le solicitan más dinero, teniendo en consideración el sueldo del cliente así como la estabilidad de su trabajo, pudiendo incluso rehusarlo si no lo considerá capaz de pagar de vuelta.
+
+Por último se ponderará el historial del cliente. Cuanta deudas tiene contraídas, y cuanto es esta cifra respecto a su fortuna personal. Si es que previamente ha pagado exitosamente otra deuda. Esto contribuirá a la percepción del riesgo de la persona.
+
+
+Finalmente, se sabe que en última instancia las tasas de interés estan sujetas al gobierno. A forma de evitar abuso (usualmente) los países fijaran una tasa de interés máximanal penalizando por ley a los trangresores. Esto por supuesto, disuadirá aquellos prestamos en donde no se pueda aumentar más la tasa de interés para compensar el riesgo asociado.
+
+## b)
+
+
+```{r datos, include=FALSE}
+library(dplyr)
+
+
+
+
+test <- read.csv("loan_data_test.csv",sep=",",check.names=FALSE)
+
+
+train <- read.csv("loan_data_train.csv",sep=",",check.names=FALSE)
+
+
+
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+## c)
+
+
+
+## d)
+
+
+
+
+
+## P2.
+
+
+
+## a)
+
+
+
+## b)
