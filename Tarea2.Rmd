@@ -18,7 +18,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 
-La tasa de interés corresponde al porcentaje de un crédito que se paga en retribución a un préstamo de dinero. Esta cifra usualmente se representa porcentualmente. Esta se fija en terminos generales en función de la situación economica de cada país, pero también varia dependiendo de persona a persona. La tasa de interes estará atada al riesgo asociado a la solicitud.
+La tasa de interés corresponde al porcentaje de un crédito que se paga en retribución a un préstamo de dinero. Esta cifra usualmente se representa porcentualmente. Esta se fija en terminos generales en función de la situación economica de cada país, pero también varia dependiendo de persona a persona. La tasa de interés será menor o mayor dependiendo del riesgo percibido de la transacción y del trasfondo del cliente.
 
 Entre aquellos factores de dependencia, encontramos la duración del prestamo. La tasa de interés será mayor en la medida que el prestamo sea de mayor duración; el prestamista considerará el riesgo de una crisis a futuro y por ello exigirá una compensación mayor. 
 
@@ -34,21 +34,39 @@ Finalmente, se sabe que en última instancia las tasas de interés estan sujetas
 ## b)
 
 
+
 ```{r datos, include=FALSE}
 library(dplyr)
 
-
-
-
-test <- read.csv("loan_data_test.csv",sep=",",check.names=FALSE)
-
-
 train <- read.csv("loan_data_train.csv",sep=",",check.names=FALSE)
+
+train$Amount.Requested <- as.numeric(as.character(train$Amount.Requested))
+train$Amount.Funded.By.Investors <- as.numeric(as.character(train$Amount.Funded.By.Investors))
+
+
+train$Interest.Rate <- as.character(train$Interest.Rate)
+train$Interest.Rate = substr(train$Interest.Rate,1,nchar(train$Interest.Rate)-1)
+train$Interest.Rate <- as.numeric(train$Interest.Rate)
+
+train$Debt.To.Income.Ratio <- as.character(train$Debt.To.Income.Ratio)
+train$Debt.To.Income.Ratio = substr(train$Debt.To.Income.Ratio,1,nchar(train$Debt.To.Income.Ratio)-1)
+train$Debt.To.Income.Ratio <- as.numeric(train$Debt.To.Income.Ratio)
+
+train$Revolving.CREDIT.Balance <- as.numeric(as.character(train$Revolving.CREDIT.Balance))
+
+
+
+str(train)
+
+```
+
+```{r datos, include=FALSE}
+
+
 
 
 
 ```
-
 
 
 
