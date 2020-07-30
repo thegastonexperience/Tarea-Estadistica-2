@@ -37,12 +37,15 @@ Finalmente, se sabe que en última instancia las tasas de interés estan sujetas
 
 ```{r datos, include=FALSE}
 library(dplyr)
+library(tidyr) 
 
 train <- read.csv("loan_data_train.csv",sep=",",check.names=FALSE)
 
 train$Amount.Requested <- as.numeric(as.character(train$Amount.Requested))
-train$Amount.Funded.By.Investors <- as.numeric(as.character(train$Amount.Funded.By.Investors))
+#train$Amount.Requested <- log(train$Amount.Requested)
 
+train$Amount.Funded.By.Investors <- as.numeric(as.character(train$Amount.Funded.By.Investors))
+#train$Amount.Funded.By.Investors <- log(train$Amount.Funded.By.Investors)
 
 train$Interest.Rate <- as.character(train$Interest.Rate)
 train$Interest.Rate = substr(train$Interest.Rate,1,nchar(train$Interest.Rate)-1)
@@ -52,30 +55,71 @@ train$Debt.To.Income.Ratio <- as.character(train$Debt.To.Income.Ratio)
 train$Debt.To.Income.Ratio = substr(train$Debt.To.Income.Ratio,1,nchar(train$Debt.To.Income.Ratio)-1)
 train$Debt.To.Income.Ratio <- as.numeric(train$Debt.To.Income.Ratio)
 
+train$Monthly.Income <- log(train$Monthly.Income)
+
+
+train$Open.CREDIT.Lines <- as.numeric(as.character(train$Open.CREDIT.Lines))
+
 train$Revolving.CREDIT.Balance <- as.numeric(as.character(train$Revolving.CREDIT.Balance))
+train$Revolving.CREDIT.Balance <- log(train$Revolving.CREDIT.Balance)
 
 
+train$Inquiries.in.the.Last.6.Months <- as.numeric(as.character(train$Inquiries.in.the.Last.6.Months))
 
-str(train)
-
-```
-
-```{r datos, include=FALSE}
-
-
-
-
+train %>% mutate_if(is.numeric, list(~na_if(., -Inf)))
 
 ```
 
 
-
+Para Revolving.CREDIT.BALANCE no se aplico logaritmo como existen valores = 0.
 
 ## c)
 
 
 
+
+```{r dispersion,message=FALSE, warning=FALSE}
+
+library(dplyr)
+library(ggplot2)
+library(tidyr) 
+
+str(train)
+
+ggplot(train, aes(x=Amount.Requested, y=Interest.Rate)) + geom_point() + geom_smooth(method=lm, se=TRUE)
+
+ggplot(train, aes(x=Debt.To.Income.Ratio, y=Interest.Rate)) + geom_point() + geom_smooth(method=lm, se=TRUE)
+
+ggplot(train, aes(x=Monthly.Income, y=Interest.Rate)) + geom_point() + geom_smooth(method=lm, se=TRUE)
+
+ggplot(train, aes(x=FICO.Range, y=Interest.Rate)) + geom_point() + geom_smooth(method=lm, se=TRUE)
+
+ggplot(train, aes(x=Open.CREDIT.Lines, y=Interest.Rate)) + geom_point() + geom_smooth(method=lm, se=TRUE)
+
+ggplot(train, aes(x=Revolving.CREDIT.Balance, y=Interest.Rate)) + geom_point() + geom_smooth(method=lm, se=TRUE)
+
+ggplot(train, aes(x=Inquiries.in.the.Last.6.Months, y=Interest.Rate)) + geom_point() + geom_smooth(method=lm, se=TRUE)
+
+
+```
+
+
+
 ## d)
+
+Respecto a la suma solicita y la tasa de interes se observa....
+
+Respecto a la proporcion de deuda por sobre ingreso ...
+
+Para el ingreso mensual respecto a la tasa de interes. ..
+
+Para la tasa de interes sobre el FICO Range se observa ..
+
+La tasa de interes respecto a las lineas de credito abiertas
+
+El balance del credito ... tasa de interes
+
+Finalmente la tasa de interes respecto a consultas en los ultimos 6 meses
 
 
 
@@ -84,8 +128,33 @@ str(train)
 ## P2.
 
 
+Plantee 3 modelos de regresi´on lineal para la variable dependiente de inter´es. Recuerde
+que puede utilizar transformaciones de las variables (cuadr´aticas, logar´ıtmicas) o agregar
+interacciones entre ellas. Adem´as puede eliminar observaciones que ensucien su an´alisis. La
+elecci´on de las variables utilizadas y su forma de ser incorporada al modelo debe sustentarse
+en los an´alisis realizados en la Parte 1 de esta Tarea.
+Luego, analice los resultados obtenidos: compare R2
+, test de hip´otesis correspondientes
+y concluya con respecto a los efectos (significativos o no) estimados.
+
+
+```{r modelos,message=FALSE, warning=FALSE}
+
+
+
+
+
+
+```
+
+
+
 
 ## a)
+
+
+
+
 
 
 
