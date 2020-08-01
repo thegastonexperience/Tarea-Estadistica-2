@@ -166,11 +166,16 @@ lm1 <- lm(Interest.Rate ~ Amount.Requested + Debt.To.Income.Ratio + Monthly.Inco
 lm2 <- lm(Interest.Rate ~ Open.CREDIT.Lines + Revolving.CREDIT.Balance + Inquiries.in.the.Last.6.Months  , data=train)
 
 
-
+lm3 <- lm(Interest.Rate ~ Loan.Purpose , data=train)
 
 summary(lm1)
 
 summary(lm2)
+
+summary(lm3)
+
+
+
 
 ```
 
