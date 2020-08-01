@@ -39,6 +39,7 @@ Finalmente, se sabe que en última instancia las tasas de interés estan sujetas
 library(dplyr)
 library(tidyr) 
 
+
 train <- read.csv("loan_data_train.csv",sep=",",check.names=FALSE)
 
 train$Amount.Requested <- as.numeric(as.character(train$Amount.Requested))
@@ -60,23 +61,26 @@ train$Monthly.Income <- log(train$Monthly.Income)
 
 train$Open.CREDIT.Lines <- as.numeric(as.character(train$Open.CREDIT.Lines))
 
-train$Revolving.CREDIT.Balance <- as.numeric(as.character(train$Revolving.CREDIT.Balance))
+train$Revolving.CREDIT.Balance <- as.numeric(as.character(train$Revolving.CREDIT.Balance)) 
 train$Revolving.CREDIT.Balance <- log(train$Revolving.CREDIT.Balance)
-
+ 
 
 train$Inquiries.in.the.Last.6.Months <- as.numeric(as.character(train$Inquiries.in.the.Last.6.Months))
 
-train %>% mutate_if(is.numeric, list(~na_if(., -Inf)))
+is.na(train) <- sapply(train, is.infinite)
 
 ```
 
 
-Para Revolving.CREDIT.BALANCE no se aplico logaritmo como existen valores = 0.
+Se requirió para la gran mayoria de las columnas convertir valores de categorias a valores numericos discretos. Para los valores en tasa se eliminó el simbolo "%" asociado. 
+
+Se utilizó logaritmo para suavizar los resultados en "Monthly.Income" y "Revolving.CREDIT.Balance". No fue necesario para "Amount.Requested" y "Amount.Funded.By.Investors" porque de por si los datos en estas columnas estan bien distribuidos entre ordenes de magnitud. Finalmente se reemplazaron los valores -inf por NA en la columna "Revolving.CREDIT.Balance", los que aparecieron producto de una suavización.
+
 
 ## c)
 
 
-
+Se prescinde de las columnas "ID" porque solo indica posición. "Amount.Funded.By.Investors" por ser muy parecida a "Amount.Requested". "Loan.Length", "state", "Home.Ownership" y "Employment.Length" por no aparentar correlación alguna y/o tener muy pocas categorias. FICO.Range por la complejidad del procesamiento de datos además de una obvia correlación con la variable dependiente, lo que vuelve redudante el analisís.
 
 ```{r dispersion,message=FALSE, warning=FALSE}
 
@@ -88,11 +92,11 @@ str(train)
 
 ggplot(train, aes(x=Amount.Requested, y=Interest.Rate)) + geom_point() + geom_smooth(method=lm, se=TRUE)
 
+ggplot(train, aes(x=Loan.Purpose, y=Interest.Rate)) + geom_point() + geom_smooth(method=lm, se=TRUE)
+
 ggplot(train, aes(x=Debt.To.Income.Ratio, y=Interest.Rate)) + geom_point() + geom_smooth(method=lm, se=TRUE)
 
 ggplot(train, aes(x=Monthly.Income, y=Interest.Rate)) + geom_point() + geom_smooth(method=lm, se=TRUE)
-
-ggplot(train, aes(x=FICO.Range, y=Interest.Rate)) + geom_point() + geom_smooth(method=lm, se=TRUE)
 
 ggplot(train, aes(x=Open.CREDIT.Lines, y=Interest.Rate)) + geom_point() + geom_smooth(method=lm, se=TRUE)
 
@@ -101,25 +105,27 @@ ggplot(train, aes(x=Revolving.CREDIT.Balance, y=Interest.Rate)) + geom_point() +
 ggplot(train, aes(x=Inquiries.in.the.Last.6.Months, y=Interest.Rate)) + geom_point() + geom_smooth(method=lm, se=TRUE)
 
 
+
 ```
+
 
 
 
 ## d)
 
-Respecto a la suma solicita y la tasa de interes se observa....
+Respecto a la suma solicitada y la tasa de interes se observa que existe una correlación positiva bien pronunciada.
 
-Respecto a la proporcion de deuda por sobre ingreso ...
+Para el proposito del prestamo respecto a tasa, no se aprecia a primera vista correlación alguna.
 
-Para el ingreso mensual respecto a la tasa de interes. ..
+Respecto a la proporcion de deuda por sobre ingreso se observa nuevamente una correlación positiva pero más bien baja.
 
-Para la tasa de interes sobre el FICO Range se observa ..
+Para el ingreso mensual respecto a la tasa de interes no parece haber una correlación marcada.
 
-La tasa de interes respecto a las lineas de credito abiertas
+La tasa de interes respecto a las lineas de credito abiertas tiene una correlación levemente positiva.
 
-El balance del credito ... tasa de interes
+El balance del credito respecto a la tasa de interes es de correlación fuertemente positiva.
 
-Finalmente la tasa de interes respecto a consultas en los ultimos 6 meses
+Finalmente la tasa de interes respecto a consultas en los ultimos 6 meses es también de correlación fuertemente positiva.
 
 
 
@@ -128,22 +134,43 @@ Finalmente la tasa de interes respecto a consultas en los ultimos 6 meses
 ## P2.
 
 
-Plantee 3 modelos de regresi´on lineal para la variable dependiente de inter´es. Recuerde
-que puede utilizar transformaciones de las variables (cuadr´aticas, logar´ıtmicas) o agregar
-interacciones entre ellas. Adem´as puede eliminar observaciones que ensucien su an´alisis. La
-elecci´on de las variables utilizadas y su forma de ser incorporada al modelo debe sustentarse
+A Plantee 3 modelos de regresión lineal para la variable dependiente de interés. Recuerde
+que puede utilizar transformaciones de las variables (cuadráticas, logarítmicas) o agregar
+interacciones entre ellas.
+
+B Adem´as puede eliminar observaciones que ensucien su an´alisis.
+
+C La elecci´on de las variables utilizadas y su forma de ser incorporada al modelo debe sustentarse
 en los an´alisis realizados en la Parte 1 de esta Tarea.
-Luego, analice los resultados obtenidos: compare R2
-, test de hip´otesis correspondientes
-y concluya con respecto a los efectos (significativos o no) estimados.
+
+D Luego, analice los resultados obtenidos: compare R2
+
+E test de hip´otesis correspondientes
+
+F y concluya con respecto a los efectos (significativos o no) estimados.
+
+
+
+
+
+
 
 
 ```{r modelos,message=FALSE, warning=FALSE}
 
 
+lm1 <- lm(Interest.Rate ~ Amount.Requested + Debt.To.Income.Ratio + Monthly.Income , data=train)
 
 
 
+lm2 <- lm(Interest.Rate ~ Open.CREDIT.Lines + Revolving.CREDIT.Balance + Inquiries.in.the.Last.6.Months  , data=train)
+
+
+
+
+summary(lm1)
+
+summary(lm2)
 
 ```
 
