@@ -1,5 +1,5 @@
 ---
-title: "Tarea 2"
+title: "Tarea 2: Regresión Lineal aplicado al análisis de tasas de interés"
 author: "Michael Clemans, Gastón Guzmán"
 date: "15 de julio de 2020"
 output: html_document
@@ -18,18 +18,18 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 
-La tasa de interés corresponde al porcentaje de un crédito que se paga en retribución a un préstamo de dinero. Esta cifra usualmente se representa porcentualmente. Esta se fija en terminos generales en función de la situación economica de cada país, pero también varia dependiendo de persona a persona. La tasa de interés será menor o mayor dependiendo del riesgo percibido de la transacción y del trasfondo del cliente.
+La tasa de interés corresponde al porcentaje de un crédito que se paga como extra en retribución a un préstamo de dinero. Esta cifra usualmente se representa porcentualmente y múltitud de factores influyen es su cálculo. La tasa de interés será menor o mayor dependiendo de la legislación presente en cada país, el riesgo percibido de la transacción, el tipo de política fiscal sugerida por el banco central, y la incidencia de factores externos. La tasa de interés será mayor si, por ejemplo, el pago se hace en el largo plazo, ya que prestamista considerará el riesgo de una crisis a futuro y por ello exigirá una compensación mayor. 
 
-Entre aquellos factores de dependencia, encontramos la duración del prestamo. La tasa de interés será mayor en la medida que el prestamo sea de mayor duración; el prestamista considerará el riesgo de una crisis a futuro y por ello exigirá una compensación mayor. 
+La tasa de interés también dependerá de los activos del solicitante, mientras mayor el patrimonio, menor será la tasa de interés ya que el prestamista puede tomar en forma de compensación los bienes en caso de que el deudor se vea incapaz de pagar. Esto es especialmente cierto para los domicilios.
 
-La tasa de interés dependera de los activos del solicitante, mientras mayor el patrimonio menor será la tasa de interés ya que el prestamista tomará en forma de compensación los bienes en caso de verse incapaz de pagar el deudor. Esto es especialmente cierto para los domicilios.
+La tasa de interés también dependerá de la cifra solicitada. Nuevamente en función del riesgo, el prestamista subirá la tasa si le solicitan más dinero, teniendo en consideración el sueldo del cliente así como la estabilidad de su trabajo, pudiendo incluso rehusarlo si no lo considera capaz de pagar de vuelta.
 
-La tasa de interés también dependerá de la cifra solicitada. Nuevamente en función del riesgo, el prestamista subirá la tasa si le solicitan más dinero, teniendo en consideración el sueldo del cliente así como la estabilidad de su trabajo, pudiendo incluso rehusarlo si no lo considerá capaz de pagar de vuelta.
+Por último se ponderará el historial del cliente. Es determinante como elemento de riesgo saber si el cliente tiene otras deudas, y cuanto es esta cifra respecto a su fortuna personal. Saber si es que previamente ha pagado exitosamente otras deudas o si, por el contrario, es un mal pagador, son factores que contribuirán a la percepción del riesgo de la persona.
 
-Por último se ponderará el historial del cliente. Cuanta deudas tiene contraídas, y cuanto es esta cifra respecto a su fortuna personal. Si es que previamente ha pagado exitosamente otra deuda. Esto contribuirá a la percepción del riesgo de la persona.
+Otros factores de incidencia son el tipo de crédito.Normalmente si un crédito no está sujeto a una revisión detallada(créditos rápidos o de alto riesgo), los intereses suelen ser muy elevados. El banco central también puede tener una política monetaria intervencionista para desinsentivar o incentivar el crédito, por lo que puede vender dinero a los bancos a un mayor o menor precio, lo que limita o incrementa el mercado del crédito. 
 
 
-Finalmente, se sabe que en última instancia las tasas de interés estan sujetas al gobierno. A forma de evitar abuso (usualmente) los países fijaran una tasa de interés máximanal penalizando por ley a los trangresores. Esto por supuesto, disuadirá aquellos prestamos en donde no se pueda aumentar más la tasa de interés para compensar el riesgo asociado.
+Finalmente, en última instancia las tasas de interés estan sujetas al gobierno. Como forma de evitar abuso o controlar el mercado, algunos países fijarán una tasa de interés máxima penalizando a los trangresores. Esto por supuesto, disuadirá préstamos demasiado riesgosos ya que no se podrá aumentar más la tasa de interés para compensar el riesgo asociado.
 
 ## b)
 
@@ -72,15 +72,15 @@ is.na(train) <- sapply(train, is.infinite)
 ```
 
 
-Se requirió para la gran mayoria de las columnas convertir valores de categorias a valores numericos discretos. Para los valores en tasa se eliminó el simbolo "%" asociado. 
+Se requirió para la gran mayoría de las columnas convertir valores de categorías a valores numéricos discretos. Para los valores en tasa se eliminó el simbolo "%" asociado. 
 
-Se utilizó logaritmo para suavizar los resultados en "Monthly.Income" y "Revolving.CREDIT.Balance". No fue necesario para "Amount.Requested" y "Amount.Funded.By.Investors" porque de por si los datos en estas columnas estan bien distribuidos entre ordenes de magnitud. Finalmente se reemplazaron los valores -inf por NA en la columna "Revolving.CREDIT.Balance", los que aparecieron producto de una suavización.
+Se utilizó logaritmo para suavizar los resultados en "Monthly.Income" y "Revolving.CREDIT.Balance", ya que dichos datos contaban con un alto grado de dispersión en sus datos. No fue necesario para "Amount.Requested" y "Amount.Funded.By.Investors" porque de por sí, los datos en estas columnas están bien distribuidos entre órdenes de magnitud. Finalmente se reemplazaron los valores -inf por NA en la columna "Revolving.CREDIT.Balance", los que aparecieron producto de una suavización.
 
 
 ## c)
 
 
-Se prescinde de las columnas "ID" porque solo indica posición. "Amount.Funded.By.Investors" por ser muy parecida a "Amount.Requested". "Loan.Length", "state", "Home.Ownership" y "Employment.Length" por no aparentar correlación alguna y/o tener muy pocas categorias. FICO.Range por la complejidad del procesamiento de datos además de una obvia correlación con la variable dependiente, lo que vuelve redudante el analisís.
+Se prescinde de las columnas "ID" porque sólo corresponde a una variable de identificación, por lo que no tendrá dependencia respecto a otras variableS. Además, se "Amount.Funded.By.Investors" por ser muy parecida a "Amount.Requested". "Loan.Length", "state", "Home.Ownership" y "Employment.Length" por no aparentar correlación alguna y/o tener muy pocas categorías. FICO.Range por la complejidad del procesamiento de datos además de una obvia correlación con la variable dependiente, lo que vuelve redudante el analisís.
 
 ```{r dispersion,message=FALSE, warning=FALSE}
 
@@ -113,71 +113,60 @@ ggplot(train, aes(x=Inquiries.in.the.Last.6.Months, y=Interest.Rate)) + geom_poi
 
 ## d)
 
-Respecto a la suma solicitada y la tasa de interes se observa que existe una correlación positiva bien pronunciada.
+A continuación se entrega una tabla que grafica muy bien la correlación entre las distintas variables. En rojo mucha correlación, en blanco no es posible afirmar correlación y en azul correlación inversa. Observamos una clara correlación entre por ejemplo, Monthly.Income y Amount.Requested, lo que es muy lógico al considerar que los créditos suelen ser muy cuidadosos respecto a la capacidad de pago de sus usuarios y no entregar montos que no será posible pagar. Todas las correlaciones parecen tener cierto grado de positividad, a excepción de Monthly.Income con Debt.To.Income ratio, que resulta tener una correlación inversa, ya que posiblemente la gente con mayor nivel de ingresos tengan menor tendencia a acumular deudas. Algunas variables resulta difícil definir su correlacción, por ejemplo Resolving.Credit.Balance con Inquiries.in.the.last.6months, lo que se ve expresado en el gráfico. Posiblemente sean variables que no se relacionan mayormente.
+```{r limpieza}
 
-Para el proposito del prestamo respecto a tasa, no se aprecia a primera vista correlación alguna.
+train[train == "."] <- NA
+train[train == "n/a"] <- NA
+train <- na.omit(train)
+                 
+```
 
-Respecto a la proporcion de deuda por sobre ingreso se observa nuevamente una correlación positiva pero más bien baja.
+```{r Grafico}
 
-Para el ingreso mensual respecto a la tasa de interes no parece haber una correlación marcada.
+library(reshape2)
 
-La tasa de interes respecto a las lineas de credito abiertas tiene una correlación levemente positiva.
+#Aqui se definen las variables
 
-El balance del credito respecto a la tasa de interes es de correlación fuertemente positiva.
-
-Finalmente la tasa de interes respecto a consultas en los ultimos 6 meses es también de correlación fuertemente positiva.
-
-
-
-
-
-## P2.
+inCorr <- select(train, -c(Loan.Length , Loan.Purpose , State, Home.Ownership , Amount.Funded.By.Investors, Employment.Length , FICO.Range, ID))
 
 
-A Plantee 3 modelos de regresión lineal para la variable dependiente de interés. Recuerde
-que puede utilizar transformaciones de las variables (cuadráticas, logarítmicas) o agregar
-interacciones entre ellas.
-
-B Adem´as puede eliminar observaciones que ensucien su an´alisis.
-
-C La elecci´on de las variables utilizadas y su forma de ser incorporada al modelo debe sustentarse
-en los an´alisis realizados en la Parte 1 de esta Tarea.
-
-D Luego, analice los resultados obtenidos: compare R2
-
-E test de hip´otesis correspondientes
-
-F y concluya con respecto a los efectos (significativos o no) estimados.
+cormat <- round(cor(inCorr),2)
 
 
 
+get_upper_tri <- function(cormat){
+cormat[lower.tri(cormat)]<- NA
+return(cormat)
+}
 
 
+#Desde aqui se crea
+
+upper_tri <- get_upper_tri(cormat)
 
 
+melted_cormat <- melt(upper_tri, na.rm = TRUE)
 
-```{r modelos,message=FALSE, warning=FALSE}
+ggplot(data = melted_cormat, aes(Var2, Var1, fill = value))+
 
+geom_tile(color = "white")+
 
-lm1 <- lm(Interest.Rate ~ Amount.Requested + Debt.To.Income.Ratio + Monthly.Income , data=train)
+scale_fill_gradient2(low = "blue", high = "red", mid = "white", 
+   midpoint = 0, limit = c(-1,1), space = "Lab", 
+   name="Pearson\nCorrelation") +
 
+theme_minimal()+ 
+  
+theme(axis.text.x = element_text(angle = 45, vjust = 1, 
+    size = 12, hjust = 1))+
 
+coord_fixed() +
 
-lm2 <- lm(Interest.Rate ~ Open.CREDIT.Lines + Revolving.CREDIT.Balance + Inquiries.in.the.Last.6.Months  , data=train)
-
-
-lm3 <- lm(Interest.Rate ~ Loan.Purpose , data=train)
-
-summary(lm1)
-
-summary(lm2)
-
-summary(lm3)
-
-
-
+labs(title='Matriz de Correlación')
 
 ```
+
 
 
 
@@ -185,9 +174,84 @@ summary(lm3)
 ## a)
 
 
+lm1 <- lm(Interest.Rate ~ Amount.Requested + Debt.To.Income.Ratio + Monthly.Income + Open.CREDIT.Lines + Revolving.CREDIT.Balance + Inquiries.in.the.Last.6.Months + Loan.Purpose , data=train)
+a <- lm(Interest.Rate ~  Monthly.Income + Amount.Requested , data=train)
+
+b <- lm(Interest.Rate ~ Monthly.Income + Amount.Requested + Debt.To.Income.Ratio + Inquiries.in.the.Last.6.Months , data=train)
+
+c <- lm(Interest.Rate ~ Monthly.Income + Amount.Requested + Debt.To.Income.Ratio + Inquiries.in.the.Last.6.Months + Open.CREDIT.Lines + Revolving.CREDIT.Balance + Loan.Purpose, data=train)
+{r modelo1,message=FALSE, warning=FALSE}
 
 
+lm1 <- lm(Interest.Rate ~  Monthly.Income + Amount.Requested , data=train)
+
+
+summary(lm1)
+
+t_alpha <- qt(0.975,2189)
+
+
+
+print(t_alpha)
+
+Para una tasa de significancia del 5% y una t student con 2189 grados de libertad:
+
+Vemos que para Monthly Income se rechaza la hipótesis nula de que el efecto es nulo pues 6.524 > 1.961048. Hay evidencia significativa para afirma que tenemos un impacto en la tasa de interés con respecto a la variable Monthly.Income.
+
+Para Amount requested 17.554 > 1.961048 rechazamos la hipótesis nula de que el efecto es nulo en la tasa de interés. Hay evidencia significativa para afirmar que un incremento de la variable Amount.Requested incrementa en un 0.2% la tasa de interés. 
+
+Los p valor son de 8.5*10ˆ(-11) para Monthly.Income y de 2*10ˆ(-16) para Amount.Requested. Estos valores son cercanos a 0, lo que reafirma que son variables significativas, ya que son mucho menores a Alpha.
+ 
+El valor de R^2 es de 0.1251 su valor ajustado es de 0.1243, siendo la diferencia entre ambos de 0.0008. Esta diferencia tan baja tiene relación al hecho de que sólo usamos dos variables. Lo normal sería que esta diferencia se haga más grande a medida que agregamos variables.
+
+
+{r modelo2,message=FALSE, warning=FALSE}
+
+
+lm2 <- lm(Interest.Rate ~ Monthly.Income + Amount.Requested + Debt.To.Income.Ratio + Inquiries.in.the.Last.6.Months , data=train)
+
+summary(lm2)
+
+t_alpha2 <- qt(0.975,2184)
+
+print(t_alpha2)
+
+Para una tasa de significancia del 5% y una t-student con 2184 grados de libertad:
+
+Nuestro t_alpha2 ahora es de 1.961051. Nuestro t value para para Montly.Income es -5.773, y es claro que 5.773>1.961051 por lo que descartamos la hipótesis nula y existe evidencia significativa para decir que un incremento de la variable Montly.Income en una unidad incrementa el valor de la tasa de interés. Lo mismo ocurre para las variables Amount.Requested, Debt.To.Income.Ratio e Inquiries.in.the.Last.6.Months, ya que todas tienen un módulo de t value valor mayor que el t_alpha2 obtenido. Por otro lado reafirmamos esto al confirmar que el p valor es tan pequeño que nuevamente es evidente que se rechaza la hipótesis nula.  Como nuestro p valor es de 2.2*10ˆ(-16), resulta evidente que ese valor es menor que nuestro Alpha, por lo que nuestras variables son significativas
+
+
+Mientras que el R^2 obtenido es de 0.1744 y R^2 ajustado es de 0.1729. Primero notamos que R^2 ha crecido significativamente respecto al punto anterior, lo que se explica por estar usando una variable extra, mientras que también tenemos una mayor diferencia entre ambos valores de R^2, lo que también se explica por el hecho de estar usando una variable extra, ya que el valor ajustado penaliza a R^2 al agregar variables extra.
+
+
+
+{r modelo3,message=FALSE, warning=FALSE}
+
+
+lm3 <- lm(Interest.Rate ~ Monthly.Income + Amount.Requested + Debt.To.Income.Ratio + Inquiries.in.the.Last.6.Months + Open.CREDIT.Lines + Revolving.CREDIT.Balance + Loa, data=train)
+
+summary(lm3)
+
+
+
+t_alpha3 <- qt(0.975,2129)
+
+print(t_alpha3)
+
+Para una tasa de significancia del 5% y una t-student con 2129 grados de libertad:
+Las variables Monthly.Income, Amount.Requested, Debt.To.Income.Ratio, Inquiries.in.the.Last.6.Months, Revolving.CREDIT.Balance, Loan.Purposemoving y Loan.Purposeother son significativas para el resultado buscado y se puede rechazar la hipótesis nula, pues para un nivel de significancia del 5%, todas tienen valores de t value menores que el t_alpha de 1.961079, por lo que existe evidencia significativa que influyen en la tasa de interés y su incremento en una unidad aumenta el valor de la tasa de intereses. De igual manera, el valor de Rˆ2 es de 0.2, mientras que su valor ajustado es de 0.1929. Vemos que al agregar más variables el valor Rˆ2 ajustado disminuye significativamente respecto a Rˆ2, lo que corresponde nuevamente a una penalización en su valor al agregar múltiples variables. El valor de p value es de 2.2*10ˆ(-16), que es un valor cercano a 0. 
 
 
 
 ## b)
+
+
+Endogeneidad: Claramente podría haber distorsiones en los resultados (sesgo de la variable omitida) ya que, por ejemplo, no se consideraron algunas variables en la parte 1 de la tarea, y no se usaron todas en la parte 2 de esta tarea. Usar la variable FICO posiblemente hubiera alterado significativamente muchas de las variables en el estudio aquí presente, y quizá debería considerarse un nuevo análisis con esta variable incluida.
+
+Además, es obvio que no están acá todas las variables posibles que podrían tener una influencia importante para determinar la tasa de interés. Por ejemplo, es posible que haya habido variables referentes a la realidad país, a las políticas públicas en el instante preciso, a si se vive un momento de inestabilidad financiera, entre otras situaciones de sesgos difícilmente estandarizables en números. Para ser más explícitos, en un caso hipotético es posible que, en una crisis como la del coronavirus, las tasas de interés aumenten significativamente producto de factores como la inestabilidad de los mercados financieros y que la demanda de créditos sea mayor producto del desempleo y quiebras de empresas. En una situación como esta las tasas de interés lógicamente aumentarán significativamente, lo que no puede ser fácilmente graficado con la data disponible.
+
+Algunos bancos tienen políticas distintas, y distintas tasas de interés típico, así como también la tasa de interés puede depender de políticas del banco central, entre otros. 
+
+Para poder solucionar algunos de estos problemas se requeriría un análisis más detallado de variables sociales, estudio de mercados aplicados a la realidad local, expresar la confianza en los mercados y las políticas privadas y públicas del momento específico en el tiempo como alguna variable a considerar, etc.                       
+
+
